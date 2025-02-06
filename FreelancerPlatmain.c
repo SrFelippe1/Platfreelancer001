@@ -84,6 +84,25 @@ void registrarPagamento() {
     printf("Valor: "); scanf("%f", &p.valor);
     printf("Forma de Pagamento: "); scanf("%s", p.forma_pagamento);
     pagamentos[numPagamentos++] = p;
+    
+    // Solicita avaliação do freelancer
+    float avaliacao;
+    printf("Avalie o freelancer (0 a 10): ");
+    scanf("%f", &avaliacao);
+    
+    // Valida a avaliação
+    if (avaliacao < 0 || avaliacao > 10) {
+        printf("Nota inválida. A nota deve estar entre 0 e 10.\n");
+    } else {
+        // Atualiza a avaliação do freelancer
+        for (int i = 0; i < numFreelancers; i++) {
+            if (strcmp(freelancers[i].nome, p.freelancer) == 0) {
+                freelancers[i].avaliacao = avaliacao;
+                printf("Avaliação do freelancer '%s' atualizada para %.1f.\n", p.freelancer, avaliacao);
+                break;
+            }
+        }
+    }
 }
 
 void exibirPagamentos() {
@@ -96,6 +115,38 @@ void exibirPagamentos() {
     }
 }
 
+void avaliarFreelancer() {
+    char nomeFreelancer[MAX_STR];
+    float avaliacao;
+    
+    printf("Digite o nome do freelancer a ser avaliado: ");
+    scanf("%s", nomeFreelancer);
+    
+    printf("Avalie o freelancer (0 a 10): ");
+    scanf("%f", &avaliacao);
+    
+    // Valida a avaliação
+    if (avaliacao < 0 || avaliacao > 10) {
+        printf("Nota inválida. A nota deve estar entre 0 e 10.\n");
+        return;
+    }
+    
+    // Atualiza a avaliação do freelancer
+    int encontrado = 0;
+    for (int i = 0; i < numFreelancers; i++) {
+        if (strcmp(freelancers[i].nome, nomeFreelancer) == 0) {
+            freelancers[i].avaliacao = avaliacao;
+            printf("Avaliação do freelancer '%s' atualizada para %.1f.\n", nomeFreelancer, avaliacao);
+            encontrado = 1;
+            break;
+        }
+    }
+    
+    if (!encontrado) {
+        printf("Freelancer não encontrado.\n");
+    }
+}
+
 int main() {
     int opcao;
     do {
@@ -104,6 +155,7 @@ int main() {
         printf("3. Buscar Freelancers\n");
         printf("4. Registrar Pagamento\n");
         printf("5. Exibir Pagamentos\n");
+        printf("6. Avaliar Freelancer\n");
         printf("0. Sair\n");
         printf("Escolha: ");
         scanf("%d", &opcao);
@@ -114,6 +166,7 @@ int main() {
             case 3: buscarFreelancers(); break;
             case 4: registrarPagamento(); break;
             case 5: exibirPagamentos(); break;
+            case 6: avaliarFreelancer(); break;  // Adicionando a opção de avaliação
         }
     } while (opcao != 0);
     return 0;
